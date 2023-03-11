@@ -1,2 +1,2 @@
 # Leetcode-Problems
-Solution developed by me for various problems on Leetcode
+Solution developed by me for various problems on Leetcode in JAVA
