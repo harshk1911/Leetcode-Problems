@@ -1,0 +1,50 @@
+//Problem Name : Letter Combinations of a Phone Number
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
+
+class Solution {
+    public List<String> letterCombinations(String digits) {
+
+        List<String> result = new ArrayList<>();
+        if(digits.length() == 0)
+        {
+            return result;
+        }
+        HashMap<Character, List<String>> comb = new HashMap<>();
+        comb.put('2', Arrays.asList("a","b","c"));
+        comb.put('3', Arrays.asList("d","e","f"));
+        comb.put('4', Arrays.asList("g","h","i"));
+        comb.put('5', Arrays.asList("j","k","l"));
+        comb.put('6', Arrays.asList("m","n","o"));
+        comb.put('7', Arrays.asList("p","q","r","s"));
+        comb.put('8', Arrays.asList("t","u","v"));
+        comb.put('9', Arrays.asList("w","x","y","z"));
+
+        if(digits.length() == 1)
+        {
+            return comb.get(digits.charAt(0));
+        }
+        if(digits.length() == 2)
+        {
+            result = combineList(comb.get(digits.charAt(0)),comb.get(digits.charAt(1)));
+        }
+        if(digits.length() > 2 && digits.length() < 5)
+        {
+            String small = digits.substring(0,digits.length() - 1);
+            result = combineList(letterCombinations(small),comb.get(digits.charAt(digits.length() - 1)));
+        }
+        return result;
+    }
+    private List<String> combineList(List<String> list1,List<String> list2)
+    {
+        List<String> result = new ArrayList<>();
+        for(String i: list1)
+        {
+            for(String j: list2)
+            {
+                result.add(i + j);
+            }
+        }
+        return result;
+    }
+}
