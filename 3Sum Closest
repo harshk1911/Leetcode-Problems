@@ -1,0 +1,40 @@
+//Problem Name : 3Sum Closest
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/3sum-closest/description/
+//Logic : Logic for 3 sum is used with small change of storing closest number to target in case target is not found in any combination.
+
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int miniDifference = Integer.MAX_VALUE;
+        int j,k,difference;
+        int closestValue = 0;
+        for(int i = 0;i < nums.length - 2;i ++)
+        {
+            j = i + 1;
+            k = nums.length - 1;
+            while (j < k)
+            {
+                difference = target - (nums[i] + nums[j] + nums[k]);
+                if(difference == 0)
+                {
+                    return target;
+                }
+                else if(difference < 0)
+                {
+                    k = k - 1;
+                }
+                else
+                {
+                    j = j + 1;
+                }
+                if(Math.abs(difference) < miniDifference)
+                {
+                    miniDifference = Math.abs(difference);
+                    closestValue = target - difference;
+                }
+            }
+        }
+        return closestValue;
+    }
+}
