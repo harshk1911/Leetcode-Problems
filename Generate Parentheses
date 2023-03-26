@@ -11,11 +11,13 @@ class Solution {
     }
     public void putBracket(int lb,int rb,String op,List<String> lst,int n)
     {
+        //Condition for valid n bracket parentheses
         if(lb == rb && rb == n)
         {
             lst.add(op);
             return;
         }
+        //Iterating through options '(',')'
         for(char a: brackets)
         {
             if(a == '(' && lb < n)
@@ -23,6 +25,7 @@ class Solution {
                 lb ++;
                 op = op + '(';
                 putBracket(lb,rb,op,lst,n);
+                //Check if valid parentheses can be generated with ')' 
                 lb --;
                 op = op.substring(0,op.length()-1);
             }
