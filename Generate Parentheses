@@ -1,0 +1,37 @@
+//Problem Name : Generate Parentheses
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/generate-parentheses/
+
+class Solution {
+    public static char[] brackets = {'(',')'};
+    public List<String> generateParenthesis(int n) {
+        List<String> output = new ArrayList<>();
+        putBracket(1,0,"(",output,n);
+        return output;
+    }
+    public void putBracket(int lb,int rb,String op,List<String> lst,int n)
+    {
+        if(lb == rb && rb == n)
+        {
+            lst.add(op);
+            return;
+        }
+        for(char a: brackets)
+        {
+            if(a == '(' && lb < n)
+            {
+                lb ++;
+                op = op + '(';
+                putBracket(lb,rb,op,lst,n);
+                lb --;
+                op = op.substring(0,op.length()-1);
+            }
+            if(a == ')' && rb < lb)
+            {
+                rb ++;
+                op = op + ')';
+                putBracket(lb,rb,op,lst,n);
+            }
+        }
+    }
+}
