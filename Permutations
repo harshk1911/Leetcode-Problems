@@ -1,0 +1,36 @@
+//Problem Name : Permutations
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/permutations/description/
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List templist1 = new ArrayList<>();
+        for(int i:nums)
+        {
+            templist1.add(i);
+        }
+        List<Integer> templist2 = new ArrayList<>();
+        List<List<Integer>> permlist = new ArrayList<>();
+        permutate(templist1,templist2,permlist);
+        return permlist;
+    }
+    public void permutate(List<Integer> templist1,List<Integer> templist2,List<List<Integer>> permlist)
+    {
+        //Base Condition
+        if(templist1.size() == 0)
+        {
+            permlist.add(new ArrayList<>(templist2));
+            return;
+        }
+        for(int i: templist1)
+        {
+            templist2.add(i);
+            //Creating new list to avoid concurrent modification exception
+            List<Integer> templist3 = new ArrayList<>(templist1);
+            templist3.remove(Integer.valueOf(i));
+            permutate(templist3,templist2,permlist);
+            templist2.remove(Integer.valueOf(i));
+        }
+        return;
+    }
+}
