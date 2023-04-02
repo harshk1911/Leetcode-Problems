@@ -1,0 +1,27 @@
+//Problem Name : Subsets
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/subsets/description/
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> initial = new ArrayList<>();
+        //Since empty list is also a subset adding empty list
+        result.add(initial);
+        iterate(initial,result,0,nums);
+        return result;
+    }
+    public void iterate(List<Integer> initial,List<List<Integer>> result,int start,int[] nums)
+    {
+        for(int i = start;i < nums.length;i ++)
+        {
+            initial.add(nums[i]);
+            result.add(new ArrayList<>(initial));
+            iterate(initial,result,i+1,nums);
+            initial.remove(initial.size()-1);
+        }
+    }
+}
