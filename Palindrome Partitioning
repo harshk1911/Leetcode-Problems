@@ -1,0 +1,81 @@
+//Problem Name : Palindrome Partitioning
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/palindrome-partitioning/
+//Intuition : Start with first character. From second character onwards there are two options, either add next character to last string in array 
+//            or add next character as last string in array. If adding character as last string in an array check if previous string is a palindrome.Only if 
+//            last string is palindrome proceed to add new character to end of list. In case of adding character to last string in array,check if complete string is 
+//            palindrome at the end.
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> input = new ArrayList<>();
+        ArrayList<String> startList = new ArrayList<>();
+        startList.add(s.substring(0,1));
+        input.add(startList);
+        if(s.length() == 1)
+            return input;
+        int i = 1;
+        return subsets(new ArrayList<>(),input,s,i,new ArrayList<>());
+    }
+    public List<List<String>> subsets(List<List<String>> output, List<List<String>> input, String inputString, int pos,List<List<String>> result)
+    {
+        if(pos == inputString.length())
+        {
+            return result;
+        }
+        addToLastString(output,input,pos,inputString,result);
+        addAsLastString(output,input,pos,inputString,result);
+        subsets(new ArrayList<>(),new ArrayList<>(output),inputString,pos+1,result);
+        return result;
+    }
+    public void addToLastString(List<List<String>> output,List<List<String>> input,int pos,String inputString,List<List<String>> result)
+    {
+        String c = inputString.substring(pos,pos+1);
+        for(List<String> list: input)
+        {
+            String lastString = list.get(list.size() - 1);
+            ArrayList<String> newList = new ArrayList<>(list);
+            newList.set(list.size()-1,lastString+c);
+            if((inputString.length() - 1) == pos)
+            {
+                if(isPalindrome(newList.get(newList.size() - 1)))
+                    result.add(newList);
+            }
+            else
+            {
+                output.add(newList);
+            }
+        }
+    }
+    public void addAsLastString(List<List<String>> output,List<List<String>> input,int pos,String inputString,List<List<String>> result)
+    {
+        String c = inputString.substring(pos,pos+1);
+        for(List<String> list: input)
+        {
+            String lastChar = list.get(list.size() - 1);
+            if(isPalindrome(lastChar))
+            {
+                ArrayList<String> newList = new ArrayList<>(list);
+                newList.add(c);
+                if((inputString.length() - 1) == pos)
+                {
+                    result.add(newList);
+                }
+                else
+                {
+                    output.add(newList);
+                }
+            }
+        }
+    }
+    public boolean isPalindrome(String c)
+    {
+        StringBuilder j = new StringBuilder();
+        j.append(c);
+        j.reverse();
+        return (j.toString()).equals(c);
+    }
+}
