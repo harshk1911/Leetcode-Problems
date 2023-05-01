@@ -1,0 +1,36 @@
+//Problem Name : Average Salary Excluding the Minimum and Maximum Salary
+//Difficulty : Easy
+//Link : https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/
+
+class Solution {
+    public double average(int[] salary) {
+        int max,min;
+        double sum = 0;
+        if(salary[0] < salary[1])
+        {
+            max = salary[1];
+            min = salary[0];
+        }
+        else
+        {
+            max = salary[0];
+            min = salary[1];
+        }
+        for(int i = 2;i < salary.length;i ++)
+        {
+            if(salary[i] > max)
+            {
+                sum += max;
+                max = salary[i];
+            }
+            else if(salary[i] < min)
+            {
+                sum += min;
+                min = salary[i];
+            }
+            else
+                sum += salary[i];
+        }
+        return sum / (salary.length - 2);   
+    }
+}
