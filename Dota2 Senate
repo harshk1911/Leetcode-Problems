@@ -1,0 +1,112 @@
+//Problem Name : Dota2 Senate
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/sign-of-the-product-of-an-array/
+//My Approach : Traverse the string and add active senators in new string. Do this till string contains senators of only one party. 
+//My Code
+class Solution {
+    public String predictPartyVictory(String senate) {
+        int rc = 0,dc = 0;
+        String str = new String();
+        while(true)
+        {
+            for(int i=0;i < senate.length();i ++)
+            {
+                if(rc > 0 || dc > 0)
+                {
+                    if(rc > 0)
+                    {
+                        if(senate.charAt(i) == 'D')
+                            rc --;
+                        else
+                        {
+                            str = str + senate.charAt(i);
+                            rc ++;
+                        }
+                    }
+                    else
+                    {
+                        if(senate.charAt(i) == 'R')
+                            dc --;
+                        else
+                        {
+                            str = str + senate.charAt(i);
+                            dc ++;
+                        }
+                    }
+                }
+                else
+                {
+                    if(senate.charAt(i) == 'R')
+                        rc ++;
+                    else
+                        dc ++;
+                    str = str + senate.charAt(i);
+                }
+            }
+            senate = str;
+            str = "";
+            if(!senate.contains("D"))
+                return "Radiant";
+            if(!senate.contains("R"))
+                return "Dire";
+        }
+    }
+}
+
+//Optimal Solution 1 (Use of queues)
+//Explanation : https://leetcode.com/problems/dota2-senate/solutions/3483399/simple-diagram-explanation/
+//Code 
+class Solution {
+    public String predictPartyVictory(String senate) {
+        Queue<Integer> q1 = new LinkedList<Integer>(), q2 = new LinkedList<Integer>();
+        int n = senate.length();
+        for(int i = 0; i<n; i++){
+            if(senate.charAt(i) == 'R')q1.add(i);
+            else q2.add(i);
+        }
+        while(!q1.isEmpty() && !q2.isEmpty()){
+            int r_index = q1.poll(), d_index = q2.poll();
+            if(r_index < d_index)q1.add(r_index + n);
+            else q2.add(d_index + n);
+        }
+        return (q1.size() > q2.size())? "Radiant" : "Dire";
+    }
+}
+
+//Optimal Solution 2 (Converting string to character array)
+//Explanation : Set inactive senators as 0 and after traversing array check if some member of both party is active. When members of one party become inactive return active party
+//Code
+class Solution {
+    public String predictPartyVictory(String senate) {
+        
+        boolean r = true;
+        boolean d = true;
+        char[] senates = senate.toCharArray();
+        int flag = 0;
+
+        while (r && d) {
+            r = false;
+            d = false; 
+
+            for (int i = 0; i < senates.length; i++) {
+                if (senates[i] == 'R') {
+                    if (flag < 0) {
+                        senates[i] = 0;
+                    } else {
+                        r = true;
+                    }
+                    flag++;
+                } else if (senates[i] == 'D') {
+                    if (flag > 0) {
+                        senates[i] = 0;
+                    } else {
+                        d = true;
+                    }
+                    flag--;
+                }
+            }
+        }
+
+        return r ? "Radiant" : "Dire";
+    }
+}
