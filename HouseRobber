@@ -1,0 +1,35 @@
+//Problem Name : House Robber
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/house-robber/description/
+//My Approach : Use dyanmic programming iterative method
+//Code : 
+class Solution {
+    public int rob(int[] nums) {
+        if(nums.length == 1)
+            return nums[0];
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0],nums[1]);
+        for(int i = 2;i < nums.length;i ++)
+        {
+            dp[i] = Math.max(dp[i-2] + nums[i],dp[i-1]);
+        }
+        return dp[nums.length-1];
+    }
+}
+
+//Best Method : Dp with 2 variables 
+//Explanation : https://leetcode.com/problems/house-robber/solutions/156523/from-good-to-great-how-to-approach-most-of-dp-problems/
+//Code
+/* the order is: prev2, prev1, num  */
+public int rob(int[] nums) {
+    if (nums.length == 0) return 0;
+    int prev1 = 0;
+    int prev2 = 0;
+    for (int num : nums) {
+        int tmp = prev1;
+        prev1 = Math.max(prev2 + num, prev1);
+        prev2 = tmp;
+    }
+    return prev1;
+}
