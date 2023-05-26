@@ -1,0 +1,67 @@
+//Problem : Longest Palindromic Subsequence
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/longest-increasing-subsequence/description/
+//My Approach : Used Longest Common Subsequence of string and reverse of string
+//Code
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        StringBuilder sub = new StringBuilder();
+        sub.append(s);
+        sub.reverse();
+        String reverse = sub.toString();
+        int len = s.length();
+        if(s.equals(reverse))
+            return len;
+        int[][] dp = new int[len + 1][len + 1];
+        int max = 0;
+        for(int i = 1;i <= len;i ++)
+        {
+            for(int j = 1;j <= len;j ++)
+            {
+                if(s.charAt(i-1) == reverse.charAt(j-1))
+                {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+                else
+                {
+                    dp[i][j] = Math.max(dp[i][j-1],dp[i-1][j]);
+                }
+                max = Math.max(max,dp[i][j]);
+            }
+        }
+        return max;
+    }
+}
+
+//Better Approach : Used DP(Recursive + Memoized)
+//Code
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        int length = s.length();
+        int[][] memo = new int[length][length];
+        //for (int[] row : memo) {
+        //    Arrays.fill(row, -1);
+        //}
+        return sub(s, 0, s.length() - 1, memo);   
+    }
+
+    private int sub(String s, int left, int right, int[][] memo) {
+        if (left == right) {
+            return 1;
+        }
+        if (left > right) {
+            return 0;
+        }
+        if (memo[left][right] != 0) {
+            return memo[left][right];
+        }
+        if (s.charAt(left) == s.charAt(right)) {
+            memo[left][right] = sub(s, left + 1, right - 1, memo) + 2;
+            return memo[left][right];
+        }
+        int leftSide = sub(s, left, right - 1, memo);
+        int rightSide = sub(s, left + 1, right, memo);
+        memo[left][right] = Math.max(leftSide, rightSide);
+        return memo[left][right];
+    }
+}
