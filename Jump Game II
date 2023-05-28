@@ -1,0 +1,59 @@
+//Problem : Jump Game II
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/jump-game-ii/
+//My Approach : Used Bottom Up DP
+//Code
+class Solution {
+    public int jump(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp,nums.length - 1);
+        dp[nums.length - 1] = 0;
+        for(int i = nums.length - 2;i >= 0;i --)
+        {
+            int reach = i + nums[i];
+            for(int j = i + 1;j <= reach && j < nums.length;j ++)
+            {
+                dp[i] = Math.min(dp[i],1 + dp[j]);
+            }
+        }
+        return dp[0];
+    }
+}
+
+//Better Approach
+class Solution {
+    public int jump(int[] nums) {
+        int max_i = 0;
+        int steps = 0;
+        int count = nums[0];
+        int i = 0;
+        if(nums.length == 1) {
+            return 0;
+        }
+        while(i < nums.length) {
+        //Check if last position can be reached from current position
+            if(count >= nums.length - (i + 1)) {
+                 steps++;
+                 break;
+            }
+            //If not then move to the position that can reach farthest position
+            max_i = max(nums, i+1, i + nums[i]+1);
+            i = max_i;
+            count = nums[i];
+            steps++;
+        }
+        return steps;
+    }
+    public int max(int[] arr, int start, int end) {
+        int max = arr[start];
+        int index = 0;
+        while(start < end) {
+            if(max <= arr[start] + start) {
+                max = arr[start] + start;
+                index = start;
+            }
+            start++;
+        }
+        return index;
+    }
+}
