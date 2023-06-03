@@ -1,0 +1,51 @@
+//Problem : Regular Expression Matching
+//Difficulty : Hard
+//Link : https://leetcode.com/problems/regular-expression-matching
+//Approach : Recursion + Memoization (https://www.youtube.com/watch?v=HAA8mgxlov8)
+//Code
+class Solution {
+    public boolean isMatch(String s, String p) {
+        int[][] dp = new int[s.length() + 1][p.length() + 1];
+        for(int[] arr : dp)
+        {
+            Arrays.fill(arr,-1);
+        }
+        return recursion(s,p,0,0,dp) == 1 ? true : false;
+    }
+    public int recursion(String s,String p,int i,int j,int[][] dp)
+    {
+        if(i >= s.length() && j >= p.length())
+            return 1;
+        if(j >= p.length() && i < s.length())
+            return 0;
+        if(dp[i][j] != -1)
+            return dp[i][j];
+        if(j < p.length() - 1 && p.charAt(j + 1) == '*')
+        {
+            if(i >= s.length())
+            {
+                dp[i][j] = recursion(s,p,i,j + 2,dp);
+            }
+            else
+            {
+                if(p.charAt(j) == '.' || p.charAt(j) == s.charAt(i))
+                    dp[i][j] = Math.max(recursion(s,p,i + 1,j,dp),recursion(s,p,i,j + 2,dp));
+                else
+                    dp[i][j] = recursion(s,p,i,j + 2,dp);
+            }
+        }
+        else
+        {
+            if(i >= s.length())
+                dp[i][j] = 0;
+            else
+            {
+                if(p.charAt(j) == '.' || p.charAt(j) == s.charAt(i))
+                    dp[i][j] = recursion(s,p,i + 1,j + 1,dp);
+                else
+                    dp[i][j] = 0;
+            }
+        }
+        return dp[i][j];
+    }
+}
