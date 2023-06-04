@@ -1,0 +1,47 @@
+//Problem : Longest Increasing Path in a Matrix
+//Difficulty : Hard
+//Link : https://leetcode.com/problems/longest-increasing-path-in-a-matrix/description/
+//Approach : Used Recursion + Memoization
+//Code
+class Solution {
+    public int longestIncreasingPath(int[][] matrix) {
+        int max = 0;
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        for(int[] arr : dp)
+        {
+            Arrays.fill(arr,-1);
+        }
+        for(int i = 0;i < matrix.length;i ++)
+        {
+            for(int j = 0;j < matrix[0].length;j ++)
+            {
+                max = Math.max(max,1 + recursion(matrix,i,j,dp));
+            }
+        }
+        return max;
+    }
+    public int recursion(int[][] matrix,int i,int j,int[][] dp)
+    {
+        int left = 0,right = 0,top = 0,down = 0;
+        if(dp[i][j] != -1)
+            return dp[i][j];
+        if((j < matrix[0].length - 1) && (matrix[i][j] < matrix[i][j+1]))
+        {
+            right = 1 + recursion(matrix,i,j+1,dp);
+        }
+        if((j > 0) && (matrix[i][j] < matrix[i][j-1]))
+        {
+            left = 1 + recursion(matrix,i,j-1,dp);
+        }
+        if((i < matrix.length - 1) && (matrix[i][j] < matrix[i+1][j]))
+        {
+            down = 1 + recursion(matrix,i+1,j,dp);
+        }
+        if((i > 0) && (matrix[i][j] < matrix[i-1][j]))
+        {
+            top = 1 + recursion(matrix,i-1,j,dp);
+        }
+        dp[i][j] = Math.max(left,Math.max(right,Math.max(top,down)));
+        return dp[i][j];
+    }
+}
