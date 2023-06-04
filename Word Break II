@@ -1,0 +1,85 @@
+//Problem : Word Break II
+//Difficulty : Hard
+//Link : https://leetcode.com/problems/word-break-ii/description/
+//Approach : Used DP + HashMap 
+//Code
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        HashMap<Integer,ArrayList<String>> map = new HashMap<>();
+        map.put(s.length(),new ArrayList<String>());
+        for(int i = s.length() - 1;i >= 0;i --)
+        {
+            for(String word: wordDict)
+            {
+                if(i + word.length() <= s.length() && s.substring(i,i + word.length()).equals(word))
+                {
+                    if(map.containsKey(i + word.length()))
+                    {
+                        ArrayList<String> arr = new ArrayList<>();
+                        if(i + word.length() == s.length())
+                        {
+                            arr.add(word);
+                            map.put(i,arr);
+                        }
+                        else
+                        {
+                            if(map.containsKey(i))
+                            {
+                                ArrayList<String> arr1 = map.get(i);
+                                for(String str: map.get(i + word.length()))
+                                {
+                                    arr1.add(word + " " + str);
+                                }
+                                map.put(i,arr1);
+                            }
+                            else
+                            {
+                                for(String str: map.get(i + word.length()))
+                                {
+                                    arr.add(word + " " + str);
+                                }
+                                map.put(i,arr);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(map.containsKey(0))
+            return map.get(0);
+        else
+            return new ArrayList<>();
+    }
+}
+
+//Better Approach : Use DFS + Hashset
+//Code
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        
+        dfs(s, wordDict, set, new ArrayList<>());
+        List<String> ans = new ArrayList<>();
+
+        for (String str : set) {
+            ans.add(str);
+        }
+        return ans;
+    }
+
+    public void dfs(String s, List<String> wordDict, Set<String> ans, List<String> tempArr) {
+        if (s.length() == 0) {
+            ans.add(String.join(" ", tempArr));
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            String sub = s.substring(0, i+1);
+            if (wordDict.contains(sub)) {
+                tempArr.add(sub);
+                dfs(s.substring(i+1), wordDict, ans, new ArrayList<>(tempArr));
+                
+                tempArr.remove(tempArr.size() - 1);
+            }
+        }
+    }
+}
