@@ -1,0 +1,106 @@
+//Problem - Top K Frequent Elements
+//Difficulty - Medium
+//Link - https://leetcode.com/problems/top-k-frequent-elements/
+//Approach - use hashmap to store element along with frequency. Sort hashmap and find top k frequent elements
+//Code
+import java.util.Collections;  
+import java.util.Comparator;  
+import java.util.HashMap;  
+import java.util.LinkedHashMap;  
+import java.util.LinkedList;  
+import java.util.List;  
+import java.util.Map;  
+import java.util.Map.Entry;
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i:nums)
+        {
+            if(map.containsKey(i))
+            {
+                int cnt = map.get(i);
+                cnt ++;
+                map.put(i,cnt);
+            }
+            else
+            {
+                map.put(i,1);
+            }
+        }
+        List<Entry<Integer, Integer>> list = new LinkedList<Entry<Integer, Integer>>(map.entrySet());  
+        Collections.sort(list, new Comparator<Entry<Integer, Integer>>()   
+        {  
+        public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2)   
+        {    
+        return o2.getValue().compareTo(o1.getValue());  
+        }    
+        });  
+        Map<Integer, Integer> sortedMap = new LinkedHashMap<Integer, Integer>();  
+        for (Entry<Integer, Integer> entry : list)   
+        {  
+            sortedMap.put(entry.getKey(), entry.getValue());  
+        }
+        int[] ans = new int[k];
+        k --;
+        for(Entry<Integer, Integer> entry : sortedMap.entrySet())
+        {
+            if(k >= 0)
+                ans[k] = entry.getKey();
+            else
+                break;
+            k --;
+        }
+        return ans;
+    }
+}
+
+//Better Approach : Maintain hashmap with element and frequency of elements. Create an array of lists.Elements will be stored in the ith list where 
+//i will be the frequency of the element. 
+//Code
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+
+        // k most frequent elements
+        // store in a hashmap (value / frequency)
+        // bucket sort??
+
+        Map<Integer, Integer> map = new HashMap();
+
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        List[] buckets = new ArrayList[nums.length + 1];
+
+        // initialize buckets
+
+        for (int x = 0; x < buckets.length; x++) {
+            buckets[x] = new ArrayList();
+        }
+
+        for (Integer key : map.keySet()) {
+            buckets[map.get(key)].add(key);
+        }
+
+        // flatten
+        List<Integer> flattened = new ArrayList();
+
+        // arranged in ascending order
+        for (List bucket : buckets) {
+            flattened.addAll(bucket);
+        }
+
+        int[] result = new int[k];
+
+        int finalSize = flattened.size() - 1;
+        int counter = 0;
+
+        for (int x = finalSize; x > finalSize - k; x--) {
+            result[counter] = flattened.get(x);
+            counter++;
+        }
+
+        return result;       
+        
+    }
+}
