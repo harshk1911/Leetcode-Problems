@@ -1,0 +1,29 @@
+//Problem : Group Anagrams
+//Difficulty : Medium
+//Link : https://leetcode.com/problems/group-anagrams/description/
+//Approach : Maintain a map with sorted word as key
+//Code
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,ArrayList<String>> map = new HashMap<>();
+        for(String str: strs)
+        {
+            char[] string = str.toCharArray();
+            Arrays.sort(string);
+            String s1 = String.valueOf(string);
+            ArrayList<String> arr;
+            if(map.containsKey(s1))
+                arr = map.get(s1);
+            else
+                arr = new ArrayList<>();
+            arr.add(str);
+            map.put(s1,arr);
+        }
+        List<List<String>> out = new ArrayList<>();
+        for(String key: map.keySet())
+        {
+            out.add(map.get(key));
+        }
+        return out;
+    }
+}
