@@ -1,0 +1,92 @@
+//Problem - Valid Sudoku
+//Difficulty - Medium
+//Link - https://leetcode.com/problems/valid-sudoku/
+//Approach - Brute Force
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        int starti = 0;
+        int startj = 0;
+        for(int i = 0;i < board.length;i ++)
+        {
+            for(int j = 0;j < board[0].length;j ++)
+            {
+                starti = startValue(i);
+                startj = startValue(j);
+                if(checkRow(i,j,board) && checkColumn(i,j,board) && checkBox(i,j,starti,startj,board))
+                    continue;
+                else
+                    return false;
+            }
+        }
+        return true;    
+    }
+    public boolean checkRow(int i,int j,char[][] board)
+    {
+        char c = board[i][j];
+        if(c == '.' || j == board[0].length - 1)
+            return true;
+        for(int k = j + 1;k < board[0].length;k ++)
+        {
+            if(c == board[i][k])
+                return false;
+        }
+        return true;
+    }
+    public boolean checkColumn(int i,int j,char[][] board)
+    {
+        char c = board[i][j];
+        if(c == '.' || i == board.length - 1)
+            return true;
+        for(int k = i + 1;k < board.length;k ++)
+        {
+            if(c == board[k][j])
+                return false;
+        }
+        return true;
+    }
+    public boolean checkBox(int i,int j,int starti,int startj,char[][] board)
+    {
+        int cnt = 0;
+        char c = board[i][j];
+        if(c == '.')
+            return true;
+        for(int k = starti;k < starti + 3;k ++)
+        {
+            for(int l = startj;l < startj + 3;l ++)
+            {
+                if(board[k][l] == c)
+                {
+                    if(cnt == 0)
+                        cnt ++;
+                    else
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    public int startValue(int n)
+    {
+        if(n < 3)
+            return 0;
+        else if(n < 6)
+            return 3;
+        else
+            return 6;
+    }
+}
+//Better Approach - Use of String and Sets
+public boolean isValidSudoku(char[][] board) {
+    Set seen = new HashSet();
+    for (int i=0; i<9; ++i) {
+        for (int j=0; j<9; ++j) {
+            char number = board[i][j];
+            if (number != '.')
+                if (!seen.add(number + " in row " + i) ||
+                    !seen.add(number + " in column " + j) ||
+                    !seen.add(number + " in block " + i/3 + "-" + j/3))
+                    return false;
+        }
+    }
+    return true;
+}
