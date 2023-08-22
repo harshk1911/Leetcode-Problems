@@ -1,0 +1,44 @@
+Problem : Daily Temperatures
+Difficulty : Medium
+URL : https://leetcode.com/problems/daily-temperatures/description/
+Approach : Use stack to maintain days for which higher temperature day is not found.
+Code :
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int len = temperatures.length;
+        int[] res = new int[len];
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0;i < len;i ++)
+        {
+            while(!stack.empty() && temperatures[i] > temperatures[stack.peek()])
+            {
+                int pos = stack.pop();
+                res[pos] = i - pos;
+            }
+            stack.push(i);
+        }
+        return res; 
+    }
+}
+
+Approach : Iterate array in backward direction.
+Code :
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int[] answer = new int[temperatures.length];
+        int hottest = 0;
+        for(int i = temperatures.length-1 ; i>=0; i--) {
+            if(temperatures[i] >= hottest) {
+                hottest = temperatures[i];
+                continue;
+            } else {
+                int days = 1;
+                while(temperatures[i + days] <= temperatures[i]) {
+                    days += answer[i+days];
+                }
+                answer[i] = days;
+            }
+        }
+        return answer;
+    }
+}
