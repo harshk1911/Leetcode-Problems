@@ -1,0 +1,44 @@
+Problem : Car Fleet
+Difficulty : Medium
+URL : https://leetcode.com/problems/car-fleet/description/
+Approach : Use stack to store time at which different car fleets will reach target
+class Solution {
+    public int carFleet(int target, int[] position, int[] speed) {
+        Map<Integer,Integer> time = new TreeMap<>(Collections.reverseOrder());
+        for(int i = 0;i < position.length;i ++)
+        {
+            time.put(position[i],speed[i]);
+        }
+        List<Double> stack = new ArrayList<>();
+        for(Map.Entry<Integer, Integer> record  : time.entrySet())
+        {
+            stack.add(Double.valueOf(target - record.getKey()) / Double.valueOf(record.getValue()));
+            if(stack.size() >= 2 && stack.get(stack.size() - 1) <= stack.get(stack.size() - 2))
+                stack.remove(stack.size() - 1);
+        }
+        return stack.size();
+    }
+}
+
+Better Approach : Store time required to reach target for different positions. Traverse time array in descending manner and update fleets when higher time is found. 
+class Solution {
+    public int carFleet(int target, int[] position, int[] speed) {
+        int fleets=0;
+        float[] time = new float[target];
+        float maxTime=0;
+        for(int i=0;i<position.length;i++)
+        {
+            time[position[i]]=(float)(target-position[i])/speed[i];
+        }
+        
+        for(int i=target-1;i>=0;i--)
+        {
+            if(time[i]>maxTime)
+            {
+                maxTime=time[i];
+                fleets++;
+            }
+        }
+       return fleets; 
+    }
+}
