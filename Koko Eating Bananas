@@ -1,0 +1,69 @@
+Problem : Koko Eating Bananas
+Difficulty : Medium
+URL : https://leetcode.com/problems/koko-eating-bananas/description/
+Approach : Use binary search to solve problem
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        Arrays.sort(piles);
+        int l = 1,r = piles[piles.length - 1];
+        int ans = Integer.MAX_VALUE,mid = 0;
+        if(piles.length == 1)
+            return ((piles[0] % h == 0) ? (piles[0] / h) : (piles[0] / h + 1));
+        while(l <= r)
+        {
+            mid = l + (r - l) / 2; //To avoid integer overflow
+            if(!bananasOver(mid,piles,h))
+                l = mid + 1;
+            else
+            {
+                ans = Math.min(ans,mid);
+                r = mid - 1;
+            }
+        }
+        return ans;    
+    }
+    public boolean bananasOver(int mid,int[] piles,int hours)
+    {
+        long sum = 0;
+        for(int i: piles)
+        {
+            sum = sum + ((i % mid == 0) ? (i / mid) : (i / mid + 1));
+        }
+        return sum <= hours;
+    }
+}
+
+Alternate Approach : Sorting of array is not required. Just find maximum element of array. Better division formula used.
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int left = 1; // Minimum eating speed
+        int right = getMaxPile(piles); // Maximum eating speed
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (canEatAll(piles, h, mid)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        return left;
+    }
+    
+    private boolean canEatAll(int[] piles, int h, int speed) {
+        int hoursNeeded = 0;
+        for (int pile : piles) {
+            hoursNeeded += (pile + speed - 1) / speed; // Ceiling division
+        }
+        return hoursNeeded <= h;
+    }
+    
+    private int getMaxPile(int[] piles) {
+        int maxPile = Integer.MIN_VALUE;
+        for (int pile : piles) {
+            maxPile = Math.max(maxPile, pile);
+        }
+        return maxPile;
+    }
+}
