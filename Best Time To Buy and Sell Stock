@@ -1,0 +1,39 @@
+Problem : Best Time To Buy and Sell Stock
+Difficulty : Easy
+URL : https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+Approach : Traverse in reverse order. Check for maximum right value and keep updating profit.
+class Solution {
+    public int maxProfit(int[] prices) {
+        int max = 0;
+        int len = prices.length;
+        int maxr = prices[len - 1];
+        for(int i = len - 2;i >= 0;i --)
+        {
+            if((maxr - prices[i]) > max)
+                max = maxr - prices[i];
+            if(prices[i] > maxr)
+                maxr = prices[i];
+        }
+        return max;
+    }
+}
+
+Approach : Use sliding window
+class Solution {
+    public int maxProfit(int[] prices) {
+  int left = 0; // Buy
+  int right = 1; // sell
+  int max_profit = 0;
+  while (right < prices.length) {
+    if (prices[left] < prices[right]) {
+      int profit = prices[right] - prices[left]; // our current profit
+
+      max_profit = Math.max(max_profit, profit);
+    } else {
+      left = right;
+    }
+    right++;
+  }
+  return max_profit;
+  }
+}
