@@ -1,0 +1,52 @@
+Problem : Longest Repeating Character Replacement
+Difficulty : Medium
+URL : https://leetcode.com/problems/longest-repeating-character-replacement/description/
+Approach : Use hashmap to store count
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int len = s.length();
+        int l = 0,r = 0;
+        int windowlen = 0;
+        HashMap<Character,Integer> hmap = new HashMap<>();
+        int max = 0;
+        while(r < len)
+        {
+            int count = hmap.getOrDefault(s.charAt(r),0);
+            hmap.put(s.charAt(r),count + 1);
+            int maxf = Collections.max(hmap.values());
+            while(r - l + 1 - maxf > k)
+            {
+                count = hmap.getOrDefault(s.charAt(l),0);
+                hmap.put(s.charAt(l),count - 1);
+                l ++;
+                maxf = Collections.max(hmap.values());
+            }
+            max = Math.max(max,r - l + 1);
+            r ++;
+        }
+        return max;
+    }
+}
+
+Approach : Use array to store count
+class Solution {
+    public int characterReplacement(String s, int k) {
+        
+        int[] count = new int[26];
+        int maxcount = 0;
+        int maxlength = 0;
+        int start = 0;
+        
+        for(int end = 0; end < s.length();end++)
+        {
+            maxcount = Math.max(maxcount,++count[s.charAt(end) - 'A']);
+                while(end - start + 1 - maxcount > k)
+                {
+                    count[s.charAt(start) - 'A']--;
+                    start++;
+                }
+            maxlength = Math.max(maxlength,end - start + 1);
+        }
+        return maxlength;
+    }
+}
