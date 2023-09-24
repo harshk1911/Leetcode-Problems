@@ -1,0 +1,69 @@
+Problem : Sliding Window Maximum
+Difficulty : Hard
+URL : https://leetcode.com/problems/sliding-window-maximum/description/
+Approach : Use ArrayList along with sliding window approach
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        int[] res = new int[nums.length - k + 1];
+        int i = 0,j = 0;
+        int arrlen = 0;
+        int first = 0;
+        while(j < nums.length)
+        {
+            arrlen = arr.size();
+            while(arrlen > 0 && nums[j] > arr.get(arrlen - 1))
+            {
+                arr.remove(arrlen - 1);
+                arrlen --;
+            }
+            arr.add(nums[j]);
+            if((j - i + 1) < k)
+                j ++;
+            else if((j - i + 1) == k)
+            {
+                first = arr.get(0);
+                res[i] = first;
+                if(nums[i] == first)
+                {
+                    arr.remove(arr.get(0));
+                }
+                i ++;
+                j ++;
+            }
+        }
+        return res;
+    }
+}
+
+Better Approach : Use ArrayDeque along with sliding window approach
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        ArrayDeque<Integer> arr = new ArrayDeque<>();
+        int[] res = new int[nums.length - k + 1];
+        int i = 0,j = 0;
+        int first = 0;
+        while(j < nums.length)
+        {
+            while(arr.size() > 0 && nums[j] > arr.getLast())
+            {
+                arr.removeLast();
+            }
+            arr.addLast(nums[j]);
+            if((j - i + 1) < k)
+                j ++;
+            else if((j - i + 1) == k)
+            {
+                first = arr.getFirst();
+                res[i] = first;
+                if(nums[i] == first)
+                {
+                    arr.removeFirst();
+                }
+                i ++;
+                j ++;
+            }
+        }
+        return res;
+    }
+}
