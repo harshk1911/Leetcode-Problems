@@ -1,0 +1,33 @@
+Problem : Reverse Linked List
+Difficulty : Easy
+URL : https://leetcode.com/problems/reverse-linked-list/description/
+Youtube Link : https://www.youtube.com/watch?v=ugQ2DVJJroc
+Approach : Recursion
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null || head.next == null)
+        {
+            return head;
+        }
+        ListNode newHead = reverseList(head.next);
+        ListNode headNext = head.next;
+        headNext.next = head;
+        head.next = null;
+        return newHead;
+    }
+}
+Approach : Iterative
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode curr = head;
+        ListNode prev = null;
+        while(curr != null)
+        {
+            ListNode nxt = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nxt;
+        }
+        return prev;
+    }
+}
