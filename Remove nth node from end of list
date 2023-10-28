@@ -1,0 +1,65 @@
+Problem : Remove nth node from end of list
+URL : https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+Difficulty : Medium
+Approach 1 : Use ArrayList to store nodes (Easy approach)
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+    List<ListNode> lst = new ArrayList<>();
+    ListNode curr = head;
+    while(curr != null)
+    {
+        lst.add(curr);
+        curr = curr.next;
+    }
+    int len = lst.size();
+    ListNode tmp2;
+    ListNode tmp1;
+    if(len == n)
+    {
+        tmp2 = lst.get(lst.size() - n);
+        return tmp2.next;    
+    }
+    if(n == 1)
+    {
+        tmp1 = lst.get(lst.size() - n - 1);
+        tmp1.next = null;
+    }
+    else
+    {
+        tmp1 = lst.get(lst.size() - n - 1);
+        tmp2 = lst.get(lst.size() - n);
+        tmp1.next = tmp2.next;    
+    }
+    return lst.get(0);   
+    }
+}
+Approach 2 : Use two pointers to reach nth element from right
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0,head);
+        ListNode left = dummy;
+        ListNode right = head;
+        while(n > 0 && right != null)
+        {
+            right = right.next;
+            n --;
+        }
+        while(right != null)
+        {
+            left = left.next;
+            right = right.next;
+        }
+        left.next = left.next.next;
+        return dummy.next;
+    }
+}
