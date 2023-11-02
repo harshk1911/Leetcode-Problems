@@ -1,0 +1,40 @@
+Problem : Copy List with Random Pointer
+Difficulty : Medium
+URL : https://leetcode.com/problems/copy-list-with-random-pointer/
+Approach : Copy all nodes and store it in map with original node as key and copied node as value. Traverse nodes again to set next and random pointers
+
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        Map<Node,Node> map = new HashMap<>();
+        Node orig = head;
+        while(orig != null)
+        {
+            Node copy = new Node(orig.val);
+            map.put(orig,copy);
+            orig = orig.next;
+        }
+        orig = head;
+        while(orig != null)
+        {
+            map.get(orig).next = map.get(orig.next);
+            map.get(orig).random = map.get(orig.random);
+            orig = orig.next;
+        }
+        return map.get(head);
+    }
+}
