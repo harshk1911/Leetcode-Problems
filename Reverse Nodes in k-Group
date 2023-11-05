@@ -1,0 +1,66 @@
+Problem : Reverse Nodes in k-Group
+Difficulty : Hard
+Approach : Reverse nodes in k group. Store start and end nodes in k group. Link end and start nodes of different nodes
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ArrayList<ListNode> arr = new ArrayList<>();
+        ArrayList<ListNode> res = new ArrayList<>();
+        ListNode curr = head;
+        while(curr != null)
+        {
+            arr.add(curr);
+            curr = curr.next;
+        }
+        int i = 0;
+        ListNode result = null;
+        while(i + k <= arr.size())
+        {
+            ListNode start = arr.get(i);
+            ListNode reverse = reverseNodes(start,k);
+            if(i == 0)
+                result = reverse;
+          //Store end and start nodes of different groups in list
+            res.add(reverse);
+            res.add(start);
+            i = i + k;
+        }
+        if(i < arr.size())
+            res.add(arr.get(i));
+      //Link end and start of different groups
+        for(int j = 1;j < res.size();j += 2)
+        {
+            ListNode last = res.get(j);
+            ListNode first = null;
+            if(j + 1 < res.size())
+                first = res.get(j + 1);
+            last.next = first;
+        }
+        return result;
+    }
+    public ListNode reverseNodes(ListNode node,int k)
+    {
+        ListNode prev = null;
+        ListNode curr = node;
+        int i = 0;
+        while(i < k)
+        {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+            i ++;
+        }
+        return prev;
+    }
+}
