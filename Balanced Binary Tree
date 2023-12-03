@@ -1,0 +1,89 @@
+Problem : Balanced Binary Tree
+URL : https://leetcode.com/problems/balanced-binary-tree/description/
+Difficulty : Easy
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+Basic Approach : First check if left subtree is height balanced,right subtree is height balanced then if current tree is height balanced. If any one condition returns false return false else return true.
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null)
+            return true;
+        if(!isBalanced(root.left))
+            return false;
+        if(!isBalanced(root.right))
+            return false;
+        int left = height(root.left);
+        int right = height(root.right);
+        int diff = (right > left) ? (right - left) : (left - right);
+        if(diff > 1)
+            return false;
+        return true;
+    }
+    public static int height(TreeNode node)
+    {
+        if(node == null)
+            return 0;
+        return 1 + Math.max(height(node.left),height(node.right));
+    }
+}
+Optimized approach : Return two values : height of tree and check if tree is height balanced. 
+int[0] => height of tree
+int[1] = 0 => tree not balanced, 1 => tree is balanced.
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        int[] result = heightBalance(root);
+        if(result[1] == 1)
+            return true;
+        return false;
+    }
+    public static int[] heightBalance(TreeNode node)
+    {
+        //int[] res = new int[2];
+        if(node == null)
+        {
+            //res[0] = 0;
+            //res[1] = 1;
+            //return res;
+            return new int[]{0,1};
+        }
+        int[] left = heightBalance(node.left);
+        if(left[1] == 0)
+        {
+            //res[1] = 0;
+            //return res;
+            return new int[2];
+        }
+        int[] right = heightBalance(node.right);
+        if(right[1] == 0)
+        {
+            //res[1] = 0;
+            //return res;
+            return new int[2];
+        }
+        int diff = (right[0] > left[0]) ? (right[0] - left[0]) : (left[0] - right[0]);
+        if(diff > 1)
+        {
+            //res[1] = 0;
+            //return res;
+            return new int[2];
+        }
+        // res[0] = 1 + Math.max(right[0],left[0]);
+        // res[1] = 1;
+        // return res;
+        return new int[]{1 + Math.max(right[0],left[0]),1};
+        
+    }
+}
